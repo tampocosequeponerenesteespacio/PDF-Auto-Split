@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
+import re
 
 # set the background color
 bg_color = "#2c3e50"
@@ -40,7 +41,10 @@ def split_pdf():
             writer = PdfWriter()
             for x in page_list:
                 writer.add_page(x)
-            output_file_name = text.split("\n")[0] + ".pdf"
+            first_line = text.split("\n")[0]
+            # extract student ID number from first line of text
+            match = re.search(r"\((\d+)\)", first_line)
+            output_file_name = match.group(1) + ".pdf"
             output_file_path = os.path.join(output_dir, output_file_name)
             with open(output_file_path, 'wb') as out:
                 writer.write(out)
